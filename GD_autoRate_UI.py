@@ -60,10 +60,15 @@ def no_transition_hint():
 def set_interval():
     global interval
     try:
-        interval = float(interval_typebox.get())
-        print(f"Set interval: {interval}s")
+        value = float(interval_typebox.get())
+
+        if value < 0.1 or value > 60:
+            tk.messagebox.showerror("Interval", "Enter a value between 0.1 and 60.")
+        else:
+            interval = value
+            print(f"Set interval: {interval}s")
     except ValueError:
-        print("Enter a valid number")
+        tk.messagebox.showerror("Interval", "Enter a valid value.")
 
 def rate():
     global scroll_attempts
