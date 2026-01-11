@@ -173,4 +173,5 @@ tk.Button(root, text="Stop (F2)", command=stop_macro).pack(pady=10)
 status_label = tk.Label(root, text="Macro stopped")
 status_label.pack(pady=10)
 
+root.iconbitmap("icon.ico")
 root.mainloop()
