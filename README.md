@@ -9,3 +9,4 @@ Automatic geometry dash level rating macro for the annoying rate achievements
 ## Notes
 - **Do not** use any texture packs
 - Enable the **No Transition** check if you have the No Transition hack on
+- It's **not recommended** to go under the default 0.5s interval, the macro may break
