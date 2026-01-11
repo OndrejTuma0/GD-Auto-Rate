@@ -8,15 +8,15 @@ import time
 
 root = tk.Tk()
 root.title("GD Auto Rate")
-root.geometry("300x200")
+root.geometry("300x225")
 root.resizable(True, True)
 
 # macro vars
 no_transition = tk.BooleanVar()
+interval = 0.5
 
 running = False
 
-region = (1250, 279, 282, 627)
 scroll_attempts = 0
 rate_attempts = 0
 
@@ -24,6 +24,7 @@ def start_macro():
     global running
     running = True
     no_transition_checkbox.config(state=tk.DISABLED)
+    interval_button.config(state=tk.DISABLED)
     status_label.config(text="Macro running")
     threading.Thread(target=macro_loop).start()
 
@@ -31,16 +32,12 @@ def stop_macro():
     global running
     running = False
     no_transition_checkbox.config(state=tk.NORMAL)
+    interval_button.config(state=tk.NORMAL)
     status_label.config(text="Macro stopped")
 
 def macro_loop():
     global running
     while running:
-        if keyboard.is_pressed("Q"):
-            print("Program stopped")
-            stop_macro()
-            break
-    
         windows = gw.getWindowsWithTitle("Geometry Dash")
 
         if windows:
@@ -55,10 +52,18 @@ def macro_loop():
         else:
             print("Geometry Dash is not open")
 
-        time.sleep(0.5)
+        time.sleep(interval)
 
 def no_transition_hint():
     tk.messagebox.showinfo("No Transition", "Enable this if you have the 'No Transition' hack enabled in Mega Hack or any other mod menu. \n\nThe macro won't wait for menu transitions with this enabled making it faster.")
+
+def set_interval():
+    global interval
+    try:
+        interval = float(interval_typebox.get())
+        print(f"Set interval: {interval}s")
+    except ValueError:
+        print("Enter a valid number")
 
 def rate():
     global scroll_attempts
@@ -71,7 +76,7 @@ def rate():
         pyautogui.leftClick()
 
     try:
-        location = pyautogui.locateOnScreen("get_it_button.PNG", region=region, confidence=0.5)
+        location = pyautogui.locateOnScreen("get_it_button.PNG", confidence=0.5)
     except:
         scroll_attempts += 1
         print("GET IT button not found")
@@ -106,7 +111,7 @@ def rate_noTransition():
         pyautogui.leftClick()
 
     try:
-        location = pyautogui.locateOnScreen("get_it_button.PNG", region=region, confidence=0.5)
+        location = pyautogui.locateOnScreen("get_it_button.PNG", confidence=0.5)
     except:
         scroll_attempts += 1
         print("GET IT button not found")
@@ -128,19 +133,37 @@ def rate_noTransition():
         pyautogui.leftClick()
         pyautogui.press("esc") ## exits level page
 
+keyboard.add_hotkey("f1", start_macro)
+keyboard.add_hotkey("f2", stop_macro)
 
 # UI
-frame = tk.Frame(root)
-frame.pack(pady=10)
+frame1 = tk.Frame(root)
+frame1.pack(pady=10)
 
-no_transition_checkbox = tk.Checkbutton(frame, text="No Transition", variable=no_transition)
+no_transition_checkbox = tk.Checkbutton(frame1, text="No Transition", variable=no_transition)
 no_transition_checkbox.pack(side=tk.LEFT, padx=5)
 
-no_transition_hint_button = tk.Button(frame, text="?", command=no_transition_hint, width=2)
+no_transition_hint_button = tk.Button(frame1, text="?", command=no_transition_hint, width=2)
 no_transition_hint_button.pack(side=tk.LEFT)
 
-tk.Button(root, text="Start", command=start_macro).pack(pady=10)
-tk.Button(root, text="Stop (Hold Q)", command=stop_macro).pack(pady=10)
+frame2 = tk.Frame(root)
+frame2.pack(pady=10)
+
+interval_label = tk.Label(frame2, text="Interval")
+interval_label.pack(side=tk.LEFT, padx=5)
+
+interval_typebox = tk.Entry(frame2, width=5)
+interval_typebox.insert(0, "0.5")
+interval_typebox.pack(side=tk.LEFT)
+
+interval_secLabel = tk.Label(frame2, text="sec")
+interval_secLabel.pack(side=tk.LEFT)
+
+interval_button = tk.Button(frame2, text="Set", command=set_interval)
+interval_button.pack(side=tk.LEFT, padx=5)
+
+tk.Button(root, text="Start (F1)", command=start_macro).pack(pady=10)
+tk.Button(root, text="Stop (F2)", command=stop_macro).pack(pady=10)
 
 status_label = tk.Label(root, text="Macro stopped")
 status_label.pack(pady=10)
