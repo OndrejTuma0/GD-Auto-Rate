@@ -1,2 +1,2 @@
 # GD-Auto-Rate
-automatic gd level rating macro for the rate achievements
+automatic geometry dash level rating macro for the annoying rate achievements
