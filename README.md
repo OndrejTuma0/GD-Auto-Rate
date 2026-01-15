@@ -13,3 +13,4 @@ On the right, click on the latest release and download and unzip **GD Auto Rate.
 ## Notes
 - **Do not** use any texture packs
 - Enable the **No Transition** check if you have the No Transition hack on
+- Windows might flag this as a false positive due to automated inputs
