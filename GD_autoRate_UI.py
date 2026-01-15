@@ -13,10 +13,11 @@ root.resizable(True, True)
 
 # macro vars
 no_transition = tk.BooleanVar()
-interval = 0.5
+interval = 0.2
 
 running = False
 
+region = (1241, 245, 300, 681)
 scroll_attempts = 0
 rate_attempts = 0
 
@@ -29,11 +30,16 @@ def start_macro():
     threading.Thread(target=macro_loop).start()
 
 def stop_macro():
+    global scroll_attempts
+    global rate_attempts
     global running
     running = False
     no_transition_checkbox.config(state=tk.NORMAL)
     interval_button.config(state=tk.NORMAL)
     status_label.config(text="Macro stopped")
+    scroll_attempts = 0
+    rate_attempts = 0
+
 
 def macro_loop():
     global running
@@ -79,9 +85,10 @@ def rate():
         rate_attempts = 0
         pyautogui.moveTo(1803, 548) # next page
         pyautogui.leftClick()
+        time.sleep(2) # loading
 
     try:
-        location = pyautogui.locateOnScreen("get_it_button.PNG", confidence=0.5)
+        location = pyautogui.locateOnScreen("get_it_button.PNG", region=region, confidence=0.45)
     except:
         scroll_attempts += 1
         print("GET IT button not found")
@@ -93,7 +100,7 @@ def rate():
         print(f"GET IT button found at: {location.left}, {location.top}")
         pyautogui.moveTo(location) ## get it button
         pyautogui.leftClick()
-        time.sleep(0.5)
+        time.sleep(0.5) # menu transition
         pyautogui.moveTo(1789, 954) ## rate button
         pyautogui.leftClick()
         pyautogui.moveTo(1212, 611) ## 10* button
@@ -103,7 +110,7 @@ def rate():
         pyautogui.moveTo(957, 678) ## ok button (in case load error occurs)
         pyautogui.leftClick()
         pyautogui.press("esc") ## exits level page
-        time.sleep(0.5)
+        time.sleep(0.5) # menu transition
 
 def rate_noTransition():
     global scroll_attempts
@@ -114,9 +121,10 @@ def rate_noTransition():
         rate_attempts = 0
         pyautogui.moveTo(1803, 548) # next page
         pyautogui.leftClick()
+        time.sleep(2) # loading
 
     try:
-        location = pyautogui.locateOnScreen("get_it_button.PNG", confidence=0.5)
+        location = pyautogui.locateOnScreen("get_it_button.PNG", region=region, confidence=0.45)
     except:
         scroll_attempts += 1
         print("GET IT button not found")
@@ -158,7 +166,7 @@ interval_label = tk.Label(frame2, text="Interval")
 interval_label.pack(side=tk.LEFT, padx=5)
 
 interval_typebox = tk.Entry(frame2, width=5)
-interval_typebox.insert(0, "0.5")
+interval_typebox.insert(0, "0.2")
 interval_typebox.pack(side=tk.LEFT)
 
 interval_secLabel = tk.Label(frame2, text="sec")
